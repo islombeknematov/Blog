@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
-
+from rest_framework.generics import ListAPIView
 # Create your views here.
 from django.views.generic import CreateView
 from Contact.models import ContactModel
+from .serializers import ContactModelSerializer
 
             # Class Based View
-            
+
+
 class ContactCreateView(CreateView):
     template_name = 'contact.html'
     model = ContactModel
@@ -30,4 +32,7 @@ class ContactCreateView(CreateView):
 #         return render(request, 'contact.html', context)
 
 
+class ContactModelListAPIView(ListAPIView):
+    queryset = ContactModel.objects.all()
+    serializer_class = ContactModelSerializer
 
