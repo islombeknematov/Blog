@@ -11,7 +11,7 @@ class BlogListView(ListView):
 	model = BlogModel
 
 	def get_queryset(self):
-		blog = BlogModel.objects.all().order_by('-created')
+		blog = BlogModel.objects.all().order_by('-created')[:4]
 		q = self.request.GET.get('q')
 		if q:
 			blog = BlogModel.objects.filter(title__icontains=q)
