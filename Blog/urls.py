@@ -1,4 +1,3 @@
-
 from django.urls import path
 from Blog.views import BlogListView, BlogModelListAPIView
 
