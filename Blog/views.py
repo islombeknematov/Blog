@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
 
 from  .models import BlogModel, CategoryModel
-from django.views.generic import ListView
+from django.views.generic import ListView, View
 from rest_framework.generics import ListAPIView
 from .serializers import BlogModelSerializer
 
@@ -34,8 +35,34 @@ class BlogListView(ListView):
 		return blog
 
 
+class PopularView(View):
+	def post(self, request, pk, *args, **kwargs):
+		blog = BlogModel.objects.get(pk=pk)
+
+		is_popular = False
+
+		for i in blog.popular.all():
+			if i == request.user:
+				is_popular = True
+				break
+		if not is_popular:
+			blog.popular.add(request.user)
+
+		next = request.POST.get('next', '/')
+		return HttpResponseRedirect(next)
+
 
 class BlogModelListAPIView(ListAPIView):
 	queryset = BlogModel.objects.all()
 	serializer_class = BlogModelSerializer
+
+
+def blog_detail(request, pk):
+	detail = get_object_or_404(BlogModel, pk=pk)
+	context = {
+		'detail': detail
+	}
+	return render(request, 'layouts/detail.html', context)
+
+
 

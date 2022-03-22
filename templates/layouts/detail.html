@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+	<a href="{% url 'blog:blog_list' %}">Main</a>
+		<div class="container">
+
+		<img src="{{ detail.cover.url }}" width="110">
+	        <p><b>Title: </b>{{ detail.title }}</p>
+	        <p><b>Created at: </b>{{ detail.created }}</p>
+	        <p><b>Body: </b>{{ detail.body }}</p>
+	</div>
+
+{% endblock %}
