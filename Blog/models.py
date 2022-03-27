@@ -20,10 +20,12 @@ class BlogModel(models.Model):
 	cover = models.ImageField(upload_to='media', null=True, blank=True)
 	created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-	categories = models.ForeignKey(CategoryModel, on_delete=models.PROTECT,
-								 default=1, related_name='blogs')
+	categories = models.ForeignKey(CategoryModel, on_delete=models.PROTECT,		 
+								 default=1, related_name='blogs')		
 
-	popular = models.ManyToManyField(User, blank=True, related_name='popular')
+	popular = models.ManyToManyField(User, related_name='popular', editable=False)
+
+	views = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.title

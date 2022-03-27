@@ -36,18 +36,18 @@
                 {{ i.title }}
             </a>    
         </b>
-        <em>
-            <form method='post' action="{% url 'blog:popular' i.pk %}">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.path }}">
-                <button style="border: none;
-                box-shadow: none;" type="submit">more: {{ i.popular.all.count }}</button>
-            </form>
-        </em>
+        <!-- <em> -->
+            <!-- <form method='post' action="#"> -->
+                <!-- {% csrf_token %} -->
+                <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
+                <!-- <button style="border: none; -->
+                <!-- box-shadow: none;" type="submit">more: {{ i.popular.all.count }}</button> -->
+            <!-- </form> -->
+        <!-- </em> -->
         <hr>
 
     {% endfor %}
-
+ 
     {% block content %}
     {% endblock %}
 

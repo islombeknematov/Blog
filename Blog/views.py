@@ -6,10 +6,15 @@ from django.views.generic import ListView, View
 from rest_framework.generics import ListAPIView
 from .serializers import BlogModelSerializer
 
+from django.db.models import Count
+
+
+
 
 class BlogListView(ListView):
 	template_name = 'layouts/base.html'
 	model = BlogModel 
+
 
 	def get_context_data(self, object_list=None, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -35,21 +40,21 @@ class BlogListView(ListView):
 		return blog
 
 
-class PopularView(View):
-	def post(self, request, pk, *args, **kwargs):
-		blog = BlogModel.objects.get(pk=pk)
+# class PopularView(View):
+# 	def post(self, request, pk, *args, **kwargs):
+# 		blog = BlogModel.objects.get(pk=pk)
 
-		is_popular = False
+# 		is_popular = False
 
-		for i in blog.popular.all():
-			if i == request.user:
-				is_popular = True
-				break
-		if not is_popular:
-			blog.popular.add(request.user)
+# 		for i in blog.popular.all():
+# 			if i == request.user:
+# 				is_popular = True
+# 				break
+# 		if not is_popular:
+# 			blog.popular.add(request.user)
 
-		next = request.POST.get('next', '/')
-		return HttpResponseRedirect(next)
+# 		next = request.POST.get('next', '/')
+# 		return HttpResponseRedirect(next)
 
 
 class BlogModelListAPIView(ListAPIView):
@@ -59,10 +64,23 @@ class BlogModelListAPIView(ListAPIView):
 
 def blog_detail(request, pk):
 	detail = get_object_or_404(BlogModel, pk=pk)
+	detail.views += 1
+
 	context = {
 		'detail': detail
 	}
 	return render(request, 'layouts/detail.html', context)
+
+
+
+
+def popular_post(request):
+	posts = BlogModel.objects.annotate(total_views=Count('popular')).order_by('-total_views')
+
+	context = {'posts': posts}
+	return render(request, 'layouts/popular.html', context) 
+
+
 
 
 
